@@ -1,12 +1,12 @@
 ﻿# Setup
-$Dir = "\\fhlbdm.com\sqlbackup\sqlbackup" 
-$OutputDir = "C:\Users\$env:USERNAME\deskotop\DirectoryDetails\"
-$textFile ="$OutputDir\stuff.txt"
+$Dir = "\\DomainName.TLD\sqlbackup\sqlbackup" 
+$OutputDir = "C:\Users\$env:USERNAME\desktop\DirectoryDetails\"
+$textFile ="$OutputDir\disk_space_results.txt"
 md $OutputDir -Force|Out-Null
 
 # For Total size
 $d=dir $Dir -recurse -force|select Mode,LastWriteTime, @{Name="Mbytes";Expression={[math]::Round($_.Length / 1Mb,2)}},Name|sort LastWriteTime -Descending|sort Mbytes -Descending|out-file $textFile -Force
-$totalSpace = 1200 # in GB
+$totalSpace = 1200 # in GB # This is the preset value for the share drive. Don't have access to query size dynamically. :(
 $forPercentage = $totalSpace/100
 
 # For each subfolder
@@ -21,7 +21,7 @@ Write-host ("{0:N2}" -f ($colItems.sum / 1GB) + " GB "+" = "`
 Set-Content $textFile –value ("The current size of the backup drive is: "+"{0:N2}" -f ($colItems.sum / 1GB) + " GB = "+"{0:N2}" -f ($colItems.sum / 1TB) + " TB "+"Usage: "+"{0:N2}" -f (($colItems.sum / 1GB)/$forPercentage)+"%"),(Get-Content $textFile)
 
 # Open the text file with all details
-Invoke-Item $OutputDir\stuff.txt;
+Invoke-Item $OutputDir\disk_space_results.txt;
 
 # Display total size in an array along with the total memory occupied by all of these backups
 $arrayOfDir= @()
