@@ -1,12 +1,25 @@
-﻿# Setup
-$Dir = "\\DomainName.TLD\sqlbackup\sqlbackup" 
-$OutputDir = "C:\Users\$env:USERNAME\desktop\DirectoryDetails\"
+﻿
+<#
+
+AUTHOR: BIBIDH BISTA
+
+
+Goes through a share drive or folder path and gives size details of each of the folders. Use case: Monitor backup sizes moved/staged on a shared drive/folder.
+
+#>
+
+ 
+ # Setup
+$Dir = "\\DomainName.TLD\sqlbackup\sqlbackup"                                            ########### Change This
+$OutputDir = "C:\Users\$env:USERNAME\desktop\DirectoryDetails\"                          ########### Change This
 $textFile ="$OutputDir\disk_space_results.txt"
 md $OutputDir -Force|Out-Null
 
 # For Total size
 $d=dir $Dir -recurse -force|select Mode,LastWriteTime, @{Name="Mbytes";Expression={[math]::Round($_.Length / 1Mb,2)}},Name|sort LastWriteTime -Descending|sort Mbytes -Descending|out-file $textFile -Force
-$totalSpace = 1200 # in GB # This is the preset value for the share drive. Don't have access to query size dynamically. :(
+
+# in GB # This is the preset value for the share drive. Don't have access to query size dynamically. :(
+$totalSpace = 1200                                                                       ########### Change This
 $forPercentage = $totalSpace/100
 
 # For each subfolder
